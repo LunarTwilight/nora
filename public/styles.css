@@ -9,7 +9,7 @@ body {
 }
 form {
 	margin: auto;
-	text-align: center;
+	text-align: right;
 	background: rgba(0, 0, 0, 0.75);
     backdrop-filter: blur(10px);
     color: hotpink;
