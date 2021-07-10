@@ -24,6 +24,10 @@ app.get('/', (req, res) => {
 	res.sendFile(path.resolve('index.html'));
 });
 
+app.get('/search', (req, res) => {
+	res.redirect('/');
+});
+
 app.post('/search', async (req, res) => {
 	res.setHeader('Content-Type', 'text/html; charset=utf-8');
 	res.setHeader('Transfer-Encoding', 'chunked');
