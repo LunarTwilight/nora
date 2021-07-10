@@ -6,6 +6,7 @@ const got = require('got');
 const path = require('path');
 
 app.use(secure);
+app.use(express.static('public'))
 app.use(express.urlencoded({
 	extended: false
 }));
