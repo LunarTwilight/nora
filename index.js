@@ -68,7 +68,8 @@ app.post('/search', async (req, res) => {
 			generator: 'allpages',
 			gaplimit: 50,
 			prop: 'revisions',
-			rvprop: 'content'
+			rvprop: 'content',
+			format: 'json'
 		}, (data) => {
 			for (const page of Object.values(data.query.pages).filter(filterResults)) {
 				pages.push(page);
