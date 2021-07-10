@@ -6,7 +6,9 @@ const got = require('got');
 const path = require('path');
 
 app.use(secure);
-app.use(express.urlencoded());
+app.use(express.urlencoded({
+	extended: false
+}));
 app.use(basicAuth({
 	users: {
 		admin: process.env.PASSWORD
