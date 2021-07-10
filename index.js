@@ -20,6 +20,6 @@ app.post('/search', async (req, res) => {
 	res.status(200).send(req.body);
 });
 
-app.listen(8080, function () {
+app.listen(process.env.PORT || 8080, function () {
 	console.log('Listening!');
 });
