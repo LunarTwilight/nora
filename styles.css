@@ -1,14 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300&display=swap');
 body {
 	background-image: url('image.jpg');
 	background-size: cover;
 	display: flex;
 }
+* {
+	font-family: 'Karla';
+}
 form {
 	margin: auto;
 	text-align: center;
-	background: rgba(0, 0, 0, 0.8);
+	background: rgba(0, 0, 0, 0.75);
     backdrop-filter: blur(10px);
     color: hotpink;
     padding: 30px;
     border-radius: 5px;
+}
+input {
+	background-color: #312c2c;
+    border-color: rgba(29, 27, 27, 0.19);
+    color: #eeeeee;
 }
