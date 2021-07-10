@@ -6,16 +6,16 @@ const got = require('got');
 const path = require('path');
 
 app.use(secure);
-app.use(express.static('public'))
-app.use(express.urlencoded({
-	extended: false
-}));
 app.use(basicAuth({
 	users: {
 		admin: process.env.PASSWORD
 	},
 	challenge: true
-}))
+}));
+app.use(express.static('public'))
+app.use(express.urlencoded({
+	extended: false
+}));
 
 app.get('/', (req, res) => {
 	res.sendFile(path.resolve('index.html'));
