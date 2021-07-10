@@ -1,9 +1,11 @@
 const express = require('express');
 const app = express();
 const basicAuth = require('express-basic-auth');
+const secure = require('express-force-https');
 const got = require('got');
 const path = require('path');
 
+app.use(secure);
 app.use(express.urlencoded());
 app.use(basicAuth({
 	users: {
