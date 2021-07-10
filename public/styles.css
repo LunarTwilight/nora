@@ -18,6 +18,7 @@ form {
 }
 input {
 	background-color: #312c2c;
-    border-color: rgba(29, 27, 27, 0.19);
     color: #eeeeee;
+	border: 1px solid #1d1b1b;
+	border-radius: 3px;
 }
