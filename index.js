@@ -17,7 +17,6 @@ app.get('/', (req, res) => {
 });
 
 app.post('/search', async (req, res) => {
-	await new Promise(resolve => setTimeout(resolve, 5000));
 	res.status(200).send(req.body);
 });
 
