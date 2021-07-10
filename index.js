@@ -12,7 +12,9 @@ app.use(basicAuth({
 	},
 	challenge: true
 }));
-app.use(express.static('public'))
+app.use(express.static('public', {
+	maxAge: '3600000'
+}));
 app.use(express.urlencoded({
 	extended: false
 }));
