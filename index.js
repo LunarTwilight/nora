@@ -6,6 +6,18 @@ const got = require('got');
 const path = require('path');
 const pkg = require('./package.json');
 
+var sendAndSleep = function (response, counter) {
+	if (counter > 10) {
+		response.end();
+	} else {
+		response.write(' ;i=' + counter);
+		counter++;
+		setTimeout(function () {
+			sendAndSleep(response, counter);
+		}, 1000)
+	}
+};
+
 app.use(secure);
 app.use(basicAuth({
 	users: {
@@ -88,18 +100,6 @@ app.post('/search', async (req, res) => {
 
 		res.write(pages.map(page => `* [[${page.title}]]`).join('\n'));
 	}
-
-	var sendAndSleep = function (response, counter) {
-		if (counter > 10) {
-			response.end();
-		} else {
-			response.write(' ;i=' + counter);
-			counter++;
-			setTimeout(function () {
-				sendAndSleep(response, counter);
-			}, 1000)
-		}
-	};
 
 	main();
 });
