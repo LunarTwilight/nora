@@ -25,8 +25,8 @@ app.get('/', (req, res) => {
 });
 
 app.post('/search', async (req, res) => {
-	async function query (params, cb, resolve) {
-		return new Promise(res => { //eslint-disable-line promise/param-names
+	function query (params, cb, resolve) {
+		return new Promise(async res => { //eslint-disable-line promise/param-names,no-async-promise-executor
 			return await got(`https://${req.body.wiki}.fandom.com/api.php`, {
 				searchParams: params,
 				'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue`
