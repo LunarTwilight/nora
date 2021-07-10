@@ -25,6 +25,12 @@ app.get('/', (req, res) => {
 });
 
 app.post('/search', async (req, res) => {
+	res.setHeader('Content-Type', 'text/html; charset=utf-8');
+	res.setHeader('Transfer-Encoding', 'chunked');
+
+	res.write('Thinking...');
+	sendAndSleep(res, 1);
+
 	function query (params, cb, resolve) {
 		return new Promise(result => { //eslint-disable-line promise/param-names
 			return got(`https://${req.body.wiki}.fandom.com/api.php`, {
@@ -76,8 +82,20 @@ app.post('/search', async (req, res) => {
 			}
 		}, () => {});
 
-		res.status(200).send(pages.map(page => `* [[${page.title}]]`).join('\n'));
+		res.write(pages.map(page => `* [[${page.title}]]`).join('\n'));
 	}
+
+	var sendAndSleep = function (response, counter) {
+		if (counter > 10) {
+			response.end();
+		} else {
+			response.write(' ;i=' + counter);
+			counter++;
+			setTimeout(function () {
+				sendAndSleep(response, counter);
+			}, 1000)
+		}
+	};
 
 	main();
 });
