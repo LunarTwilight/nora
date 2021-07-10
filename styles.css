@@ -6,4 +6,9 @@ body {
 form {
 	margin: auto;
 	text-align: center;
+	background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    color: hotpink;
+    padding: 30px;
+    border-radius: 5px;
 }
