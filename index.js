@@ -1,22 +1,21 @@
 const express = require('express');
-const app = express();
 const basicAuth = require('express-basic-auth');
 const secure = require('express-force-https');
 const got = require('got');
 const path = require('path');
 const pkg = require('./package.json');
 
-var sendAndSleep = function (response, counter) {
-	if (counter > 10) {
-		response.end();
-	} else {
-		response.write(' ;i=' + counter);
-		counter++;
-		setTimeout(function () {
-			sendAndSleep(response, counter);
-		}, 1000)
+const app = express();
+const heartbeat = (response, counter) => {
+	if (!counter) {
+		let counter = 1;
 	}
-};
+	response.write(' ;i=' + counter);
+	counter++;
+	setTimeout(() => {
+		heartbeat(response, counter);
+	}, 1000);
+}
 
 app.use(secure);
 app.use(basicAuth({
@@ -43,9 +42,8 @@ app.get('/search', (req, res) => {
 app.post('/search', async (req, res) => {
 	res.setHeader('Content-Type', 'text/html; charset=utf-8');
 	res.setHeader('Transfer-Encoding', 'chunked');
-
 	res.write('Thinking...');
-	sendAndSleep(res, 1);
+	heartbeat(res);
 
 	function query (params, cb, resolve) {
 		return new Promise(result => { //eslint-disable-line promise/param-names
