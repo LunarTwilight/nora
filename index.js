@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 
 app.post('/search', async (req, res) => {
 	function query (params, cb, resolve) {
-		return new Promise(res => { //eslint-disable-line promise/param-names
+		return new Promise(result => { //eslint-disable-line promise/param-names
 			return got(`https://${req.body.wiki}.fandom.com/api.php`, {
 				searchParams: params,
 				'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue`
@@ -41,7 +41,7 @@ app.post('/search', async (req, res) => {
 							...Object.values(data['query-continue'])
 						),
 						cb,
-						resolve || res
+						resolve || result
 					);
 				} else {
 					resolve();
@@ -74,7 +74,7 @@ app.post('/search', async (req, res) => {
 			for (const page of Object.values(data.query.pages).filter(filterResults)) {
 				pages.push(page);
 			}
-		});
+		}, () => {});
 
 		res.status(200).send(pages.map(page => `* [[${page.title}]]`).join('\n'));
 	}
