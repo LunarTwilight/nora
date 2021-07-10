@@ -1,0 +1,24 @@
+{
+  "name": "nora",
+  "version": "1.0.0",
+  "description": "source search for fandom",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LunarTwilight/nora.git"
+  },
+  "author": "LunarTwilight",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LunarTwilight/nora/issues"
+  },
+  "homepage": "https://github.com/LunarTwilight/nora#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-basic-auth": "^1.2.0",
+    "got": "^11.8.2"
+  }
+}
