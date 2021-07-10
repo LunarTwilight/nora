@@ -4,7 +4,7 @@ body {
 	display: flex;
 }
 * {
-	font-family: 'Karla';
+	font-family: 'Karla', sans-serif;
 }
 form {
 	margin: auto;
