@@ -82,7 +82,7 @@ app.post('/search', async (req, res) => {
 	});
 
 	while (true) {
-		await wait(5000);
+		await wait(50000);
 		if (finished) break;
 
 		res.write('...<br>');
