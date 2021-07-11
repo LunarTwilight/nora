@@ -91,11 +91,21 @@ app.post('/search', async (req, res) => {
 
 	search(req.body).then(data => {
 		finished = true;
-		res.write(data);
+		res.end(data);
 	});
 
 	req.on('aborted', () => {
 		console.log('aborting connection');
+		finished = true;
+	});
+
+	req.on('close', () => {
+		console.log('closing connection');
+		finished = true;
+	});
+
+	req.on('end', () => {
+		console.log('ending connection');
 		finished = true;
 	});
 
