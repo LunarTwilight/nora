@@ -7,9 +7,13 @@ const path = require('path');
 const pkg = require('./package.json');
 
 const app = express();
+let finished = false;
 
 const wait = ms => new Promise(res => setTimeout(res, ms));
 const query = (wiki, params, cb, resolve) => {
+	if (finished) {
+		return;
+	}
 	return new Promise(async result => {
 		return await got(`https://${wiki}.fandom.com/api.php`, {
 			searchParams: params,
@@ -85,10 +89,14 @@ app.post('/search', async (req, res) => {
 	`);
 	res.write('Thinking...<br>');
 
-	let finished = false;
 	search(req.body).then(data => {
 		finished = true;
 		res.write(data);
+	});
+
+	req.on('aborted', () => {
+		console.log('aborting connection');
+		finished = true;
 	});
 
 	while (true) {
