@@ -1,3 +1,4 @@
+/* eslint-disable promise/param-names */
 const express = require('express');
 const basicAuth = require('express-basic-auth');
 const secure = require('express-force-https');
@@ -7,11 +8,9 @@ const pkg = require('./package.json');
 
 const app = express();
 
-const wait = async time => {
-	return setTimeout(() => {}, time);
-}
+const wait = ms => new Promise(res => setTimeout(res, ms));
 const query = (wiki, params, cb, resolve) => {
-	return new Promise(result => { //eslint-disable-line promise/param-names
+	return new Promise(result => {
 		return got(`https://${wiki}.fandom.com/api.php`, {
 			searchParams: params,
 			'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue`
