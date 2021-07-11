@@ -72,6 +72,10 @@ app.get('/search', (req, res) => {
 });
 
 app.post('/search', async (req, res) => {
+	res.setHeader('Content-Type', 'text/html; charset=utf-8');
+	res.setHeader('Transfer-Encoding', 'chunked');
+	res.write('Thinking...');
+
 	let finished = false;
 	search(req.body).then(data => {
 		finished = true;
