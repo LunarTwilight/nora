@@ -73,6 +73,16 @@ app.get('/search', (req, res) => {
 app.post('/search', async (req, res) => {
 	res.setHeader('Content-Type', 'text/html; charset=utf-8');
 	res.setHeader('Transfer-Encoding', 'chunked');
+	res.write(`
+		<style>
+			@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300&display=swap');
+			body {
+				background-color: black;
+				color: hotpink;
+				font-family: 'Karla'
+			}
+		</style>
+	`);
 	res.write('Thinking...<br>');
 
 	let finished = false;
