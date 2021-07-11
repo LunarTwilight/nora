@@ -10,8 +10,8 @@ const app = express();
 
 const wait = ms => new Promise(res => setTimeout(res, ms));
 const query = (wiki, params, cb, resolve) => {
-	return new Promise(result => {
-		return got(`https://${wiki}.fandom.com/api.php`, {
+	return new Promise(async result => {
+		return await got(`https://${wiki}.fandom.com/api.php`, {
 			searchParams: params,
 			'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue`
 		}).json().then(data => {
