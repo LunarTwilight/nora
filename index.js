@@ -6,14 +6,14 @@ const path = require('path');
 const pkg = require('./package.json');
 
 const app = express();
-const heartbeat = (response, counter) => {
-	if (!counter) {
-		counter = 1;
+const heartbeat = (res, beat) => {
+	if (!beat) {
+		beat = 1;
 	}
-	response.write(' ;i=' + counter);
-	counter++;
+	res.write(`<br><span class="heartbeat">heartbeat: ${beat}</span>`);
+	beat++;
 	setTimeout(() => {
-		heartbeat(response, counter);
+		heartbeat(res, beat);
 	}, 50000);
 }
 
