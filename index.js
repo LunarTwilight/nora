@@ -8,7 +8,7 @@ const pkg = require('./package.json');
 const app = express();
 const heartbeat = (response, counter) => {
 	if (!counter) {
-		let counter = 1;
+		counter = 1;
 	}
 	response.write(' ;i=' + counter);
 	counter++;
