@@ -14,7 +14,7 @@ const heartbeat = (response, counter) => {
 	counter++;
 	setTimeout(() => {
 		heartbeat(response, counter);
-	}, 1000);
+	}, 50000);
 }
 
 app.use(secure);
