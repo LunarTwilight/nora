@@ -7,10 +7,9 @@ const path = require('path');
 const pkg = require('./package.json');
 
 const app = express();
-let finished = false;
 
 const wait = ms => new Promise(res => setTimeout(res, ms));
-const query = (wiki, params, cb, resolve) => {
+const query = (finished, wiki, params, cb, resolve) => {
 	if (finished) {
 		return;
 	}
@@ -77,6 +76,8 @@ app.get('/search', (req, res) => {
 });
 
 app.post('/search', async (req, res) => {
+	let finished = false;
+
 	await got.head(`https://${req.body.wiki}.fandom.com/api.php`, {
 		headers: {
 			'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue - https://youtu.be/e35AQK014tI`
@@ -106,7 +107,7 @@ app.post('/search', async (req, res) => {
 	`);
 	res.write('Thinking...<br>');
 
-	await query(req.body.wiki, {
+	await query(finished, req.body.wiki, {
 		action: 'query',
 		generator: 'allpages',
 		gaplimit: 50,
