@@ -18,7 +18,7 @@ const query = (wiki, params, cb, resolve) => {
 		return await got(`https://${wiki}.fandom.com/api.php`, {
 			searchParams: params,
 			headers: {
-				'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue`
+				'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue - https://youtu.be/e35AQK014tI`
 			}
 		}).json().then(data => {
 			cb(data);
@@ -79,7 +79,7 @@ app.get('/search', (req, res) => {
 app.post('/search', async (req, res) => {
 	await got.head(`https://${req.body.wiki}.fandom.com/api.php`, {
 		headers: {
-			'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue`
+			'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue - https://youtu.be/e35AQK014tI`
 		}
 	}).catch(result => {
 		finished = true;
