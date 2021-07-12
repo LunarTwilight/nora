@@ -38,20 +38,6 @@ const query = (wiki, params, cb, resolve) => {
 		});
 	});
 }
-const search = async params => {
-	let result;
-	await query(params.wiki, {
-		action: 'query',
-		generator: 'allpages',
-		gaplimit: 50,
-		prop: 'revisions',
-		rvprop: 'content',
-		format: 'json'
-	}, data => {
-		result = data;
-	}, () => {});
-	return result;
-}
 
 app.use(secure);
 app.use(basicAuth({
@@ -90,9 +76,18 @@ app.post('/search', async (req, res) => {
 	`);
 	res.write('Thinking...<br>');
 
-	search(req.body).then(data => {
+	await query(req.body.wiki, {
+		action: 'query',
+		generator: 'allpages',
+		gaplimit: 50,
+		prop: 'revisions',
+		rvprop: 'content',
+		format: 'json'
+	}, data => {
+		res.write(data);
+	}, () => {
 		finished = true;
-		res.end(data);
+		res.end('All done!');
 	});
 
 	req.on('aborted', () => {
@@ -115,12 +110,14 @@ app.post('/search', async (req, res) => {
 		if (finished) break;
 
 		res.write('...<br>');
-		(async function () {
-			await got('https://a-nora.herokuapp.com', {
-				username: 'admin',
-				password: process.env.PASSWORD
-			});
-		})();
+		if (process.env.PORT) {
+			(async function () {
+				await got('https://a-nora.herokuapp.com', {
+					username: 'admin',
+					password: process.env.PASSWORD
+				});
+			})();
+		}
 	}
 });
 
