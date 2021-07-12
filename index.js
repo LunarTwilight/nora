@@ -9,37 +9,44 @@ const pkg = require('./package.json');
 const app = express();
 
 const wait = ms => new Promise(res => setTimeout(res, ms));
-const query = (finished, wiki, params, cb, resolve) => {
-	if (finished) {
-		return;
-	}
-	return new Promise(async result => { //eslint-disable-line no-async-promise-executor
-		return await got(`https://${wiki}.fandom.com/api.php`, {
-			searchParams: params,
-			headers: {
-				'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue - https://youtu.be/e35AQK014tI`
+const query = ({
+	finished,
+	wiki,
+	params,
+	onResult
+}) => {
+	return new Promise(async resolve => { //eslint-disable-line no-async-promise-executor
+		while (true) {
+			let searchParams = { ...params };
+			if (finished) {
+				break;
 			}
-		}).json().then(data => {
-			cb(data);
+			console.log(searchParams);
+			const data = await got(`https://${wiki}.fandom.com/api.php`, {
+				searchParams: searchParams,
+				headers: {
+					'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue - https://youtu.be/e35AQK014tI`
+				}
+			}).json();
+
+			console.log(data);
+			onResult(data);
 
 			if (data.continue) {
-				query(
-					Object.assign(
-						{},
-						params,
-						...Object.values(data.continue)
-					),
-					cb,
-					resolve || result
+				Object.assign(
+					searchParams,
+					...Object.values(data.continue)
 				);
 			} else {
 				resolve();
+				break;
 			}
-		});
+		}
 	});
-}
+};
 const searchResults = (page, query) => {
 	const content = page.revisions[0].slots.main['*'];
+	//console.log(content);
 	if (query.startsWith('/')) {
 		if (query.test(content)) {
 			return true;
@@ -107,22 +114,26 @@ app.post('/search', async (req, res) => {
 	`);
 	res.write('Thinking...<br>');
 
-	await query(finished, req.body.wiki, {
-		action: 'query',
-		generator: 'allpages',
-		gaplimit: 50,
-		prop: 'revisions',
-		rvprop: 'content',
-		rvslots: '*',
-		format: 'json'
-	}, data => {
-		for (const page of Object.values(data.query.pages).filter(page => searchResults(page, req.body.query))) {
-			res.write(`<a href="https://${req.body.wiki}.fandom.com/wiki/${page.title}">${page.title}</a><br>`);
+	await query({
+		finished,
+		wiki: 'dev',
+		params: {
+			action: 'query',
+			generator: 'allpages',
+			prop: 'revisions',
+			rvprop: 'content',
+			rvslots: '*',
+			format: 'json'
+		},
+		onResult: data => {
+			for (const page of Object.values(data.query.pages).filter(page => searchResults(page, req.body.query))) {
+				res.write(`<a href="https://${req.body.wiki}.fandom.com/wiki/${page.title}">${page.title}</a><br>`);
+			}
 		}
-	}, () => {
-		finished = true;
-		res.end('All done!');
 	});
+
+	finished = true;
+	res.end('All done!');
 
 	req.on('aborted', () => {
 		console.log('aborting connection');
