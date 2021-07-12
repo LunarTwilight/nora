@@ -108,7 +108,7 @@ app.post('/search', async (req, res) => {
     `);
     res.write('Thinking...<br>');
 
-    for (const ns in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 14, 828, 829]) {
+    for (const ns in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
         await query({
             finished,
             wiki: 'dev',
@@ -126,8 +126,12 @@ app.post('/search', async (req, res) => {
                 if (finished) {
                     return true;
                 }
-                for (const page of Object.values(data.query.pages).filter(page => searchResults(page, req.body.query))) {
-                    res.write(`<a href="https://${req.body.wiki}.fandom.com/wiki/${page.title}">${page.title}</a><br>`);
+                try {
+                    for (const page of Object.values(data.query.pages).filter(page => searchResults(page, req.body.query))) {
+                        res.write(`<a href="https://${req.body.wiki}.fandom.com/wiki/${page.title}">${page.title}</a><br>`);
+                    }
+                } catch (error) {
+                    console.error(error, data, ns);
                 }
             }
         });
