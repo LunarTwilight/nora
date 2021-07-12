@@ -84,7 +84,7 @@ app.post('/search', async (req, res) => {
 		rvprop: 'content',
 		format: 'json'
 	}, data => {
-		res.write(data);
+		res.write(JSON.stringify(data) + '<br>');
 	}, () => {
 		finished = true;
 		res.end('All done!');
