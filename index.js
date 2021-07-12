@@ -67,6 +67,18 @@ app.get('/search', (req, res) => {
 });
 
 app.post('/search', async (req, res) => {
+	await got.head(`https://${req.body.wiki}.fandom.com/api.php`, {
+		headers: {
+			'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue`
+		}
+	}).catch(result => {
+		finished = true;
+		res.end(result);
+	});
+	if (finished) {
+		return;
+	}
+
 	res.setHeader('Content-Type', 'text/html; charset=utf-8');
 	res.setHeader('Transfer-Encoding', 'chunked');
 	res.write(`
