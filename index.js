@@ -108,7 +108,7 @@ app.post('/search', async (req, res) => {
     `);
     res.write('Thinking...<br>');
 
-    for (const ns in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
+    for (const ns of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
         await query({
             finished,
             wiki: 'dev',
