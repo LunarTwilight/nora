@@ -37,6 +37,12 @@ const query = (wiki, params, cb, resolve) => {
 		});
 	});
 }
+const searchResults = (page, query) => {
+	if (page.revisions[0].slots.main['*'].includes(query)) {
+		return true;
+	}
+	return false;
+}
 
 app.use(secure);
 app.use(basicAuth({
@@ -81,9 +87,12 @@ app.post('/search', async (req, res) => {
 		gaplimit: 50,
 		prop: 'revisions',
 		rvprop: 'content',
+		rvslots: '*',
 		format: 'json'
 	}, data => {
-		res.write(JSON.stringify(data) + '<br>');
+		for (const page of Object.values(data.query.pages).filter(page => searchResults(page, req.body.query))) {
+			res.write(`<a href="https://${req.body.wiki}/wiki/${page.title}">${page.title}</a><br>`);
+		}
 	}, () => {
 		finished = true;
 		res.end('All done!');
