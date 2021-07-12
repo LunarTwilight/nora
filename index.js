@@ -117,6 +117,7 @@ app.post('/search', async (req, res) => {
             prop: 'revisions',
             rvprop: 'content',
             rvslots: '*',
+            gaplimit: 50,
             format: 'json'
         },
         onResult: data => {
