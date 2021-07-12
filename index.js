@@ -32,7 +32,7 @@ const query = ({
             if (shouldStop !== true && data.continue) {
                 Object.assign(
                     searchParams,
-                    ...Object.values(data.continue)
+                    data.continue
                 );
             } else {
                 resolve();
