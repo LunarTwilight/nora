@@ -19,7 +19,6 @@ const query = (wiki, params, cb, resolve) => {
 			searchParams: params,
 			'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue`
 		}).json().then(data => {
-			console.log(data);
 			cb(data);
 
 			if (data['query-continue']) {
