@@ -91,7 +91,7 @@ app.post('/search', async (req, res) => {
 		format: 'json'
 	}, data => {
 		for (const page of Object.values(data.query.pages).filter(page => searchResults(page, req.body.query))) {
-			res.write(`<a href="https://${req.body.wiki}/wiki/${page.title}">${page.title}</a><br>`);
+			res.write(`<a href="https://${req.body.wiki}.fandom.com/wiki/${page.title}">${page.title}</a><br>`);
 		}
 	}, () => {
 		finished = true;
