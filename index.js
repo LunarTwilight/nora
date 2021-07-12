@@ -22,12 +22,12 @@ const query = (finished, wiki, params, cb, resolve) => {
 		}).json().then(data => {
 			cb(data);
 
-			if (data['query-continue']) {
+			if (data.continue) {
 				query(
 					Object.assign(
 						{},
 						params,
-						...Object.values(data['query-continue'])
+						...Object.values(data.continue)
 					),
 					cb,
 					resolve || result
