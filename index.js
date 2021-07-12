@@ -77,6 +77,9 @@ app.post('/search', async (req, res) => {
 				color: hotpink;
 				font-family: 'Karla'
 			}
+			a {
+				color: #ff3f8b;
+			}
 		</style>
 	`);
 	res.write('Thinking...<br>');
