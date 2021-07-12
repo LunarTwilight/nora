@@ -14,7 +14,7 @@ const query = (wiki, params, cb, resolve) => {
 	if (finished) {
 		return;
 	}
-	return new Promise(async result => {
+	return new Promise(async result => { //eslint-disable-line no-async-promise-executor
 		return await got(`https://${wiki}.fandom.com/api.php`, {
 			searchParams: params,
 			headers: {
