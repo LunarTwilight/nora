@@ -40,10 +40,18 @@ const query = (wiki, params, cb, resolve) => {
 	});
 }
 const searchResults = (page, query) => {
-	if (page.revisions[0].slots.main['*'].includes(query)) {
-		return true;
+	const content = page.revisions[0].slots.main['*'];
+	if (query.startsWith('/')) {
+		if (query.test(content)) {
+			return true;
+		}
+		return false;
+	} else {
+		if (content.includes(query)) {
+			return true;
+		}
+		return false;
 	}
-	return false;
 }
 
 app.use(secure);
