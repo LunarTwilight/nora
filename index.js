@@ -123,7 +123,7 @@ app.post('/search', async (req, res) => {
                 format: 'json'
             },
             onResult: data => {
-                if (finished) {
+                if (finished || !data.query) {
                     return true;
                 }
                 try {
