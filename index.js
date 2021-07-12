@@ -18,7 +18,6 @@ const query = ({
         const searchParams = { ...params };
 
         while (true) {
-            console.log(searchParams);
             const data = await got(`https://${wiki}.fandom.com/api.php`, {
                 searchParams,
                 headers: {
@@ -26,7 +25,6 @@ const query = ({
                 }
             }).json();
 
-            console.log(data);
             const shouldStop = onResult(data);
 
             if (shouldStop !== true && data.continue) {
@@ -43,7 +41,6 @@ const query = ({
 }
 const searchResults = (page, query) => {
     const content = page.revisions[0].slots.main['*'];
-    //console.log(content);
     if (query.startsWith('/')) {
         if (query.test(content)) {
             return true;
