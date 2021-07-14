@@ -100,7 +100,7 @@ app.post('/search', async (req, res) => {
     for (const ns of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
         await query({
             finished,
-            wiki: 'dev',
+            wiki: req.body.wiki,
             params: {
                 action: 'query',
                 generator: 'allpages',
