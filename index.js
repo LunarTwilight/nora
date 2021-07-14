@@ -85,7 +85,10 @@ app.post('/search', async (req, res) => {
         }
     }).catch(result => {
         finished = true;
-        res.end(JSON.stringify(result));
+        const code = result.response.statusCode;
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.write('<link rel="stylesheet" href="results.css"/>');
+        res.end(`Wiki returned: <a href="https://developer.mozilla.org/docs/Web/HTTP/Status/${code}">${code}</a>`);
     });
     if (finished) {
         return;
@@ -93,19 +96,7 @@ app.post('/search', async (req, res) => {
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Transfer-Encoding', 'chunked');
-    res.write(`
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Karla:wght@300&display=swap');
-            body {
-                background-color: black;
-                color: hotpink;
-                font-family: 'Karla'
-            }
-            a {
-                color: #ff3f8b;
-            }
-        </style>
-    `);
+    res.write('<link rel="stylesheet" href="results.css"/>');
     res.write('Thinking...<br>');
 
     for (const ns of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
