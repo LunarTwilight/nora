@@ -79,6 +79,7 @@ app.get('/search', (req, res) => {
 app.post('/search', async (req, res) => {
     let finished = false;
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Transfer-Encoding', 'chunked');
     res.write('<link rel="stylesheet" href="results.css"/>');
 
     await got.head(`https://${req.body.wiki}.fandom.com/api.php`, {
@@ -94,7 +95,6 @@ app.post('/search', async (req, res) => {
         return;
     }
 
-    res.setHeader('Transfer-Encoding', 'chunked');
     res.write('Thinking...<br>');
 
     for (const ns of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
