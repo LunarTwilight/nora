@@ -78,6 +78,8 @@ app.get('/search', (req, res) => {
 
 app.post('/search', async (req, res) => {
     let finished = false;
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.write('<link rel="stylesheet" href="results.css"/>');
 
     await got.head(`https://${req.body.wiki}.fandom.com/api.php`, {
         headers: {
@@ -86,17 +88,13 @@ app.post('/search', async (req, res) => {
     }).catch(result => {
         finished = true;
         const code = result.response.statusCode;
-        res.setHeader('Content-Type', 'text/html; charset=utf-8');
-        res.write('<link rel="stylesheet" href="results.css"/>');
         res.end(`Wiki returned: <a href="https://developer.mozilla.org/docs/Web/HTTP/Status/${code}">${code}</a>`);
     });
     if (finished) {
         return;
     }
 
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Transfer-Encoding', 'chunked');
-    res.write('<link rel="stylesheet" href="results.css"/>');
     res.write('Thinking...<br>');
 
     for (const ns of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
