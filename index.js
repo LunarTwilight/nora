@@ -85,7 +85,7 @@ app.post('/search', async (req, res) => {
         }
     }).catch(result => {
         finished = true;
-        res.end(result);
+        res.end(JSON.stringify(result));
     });
     if (finished) {
         return;
