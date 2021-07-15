@@ -43,9 +43,8 @@ const searchResults = (page, query) => {
     const content = page.revisions[0].slots.main['*'];
     if (query.startsWith('/')) {
         return query.test(content);
-    } else {
-        return content.includes(query);
     }
+    return content.includes(query);
 }
 
 app.use(secure);
