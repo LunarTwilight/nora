@@ -42,15 +42,9 @@ const query = ({
 const searchResults = (page, query) => {
     const content = page.revisions[0].slots.main['*'];
     if (query.startsWith('/')) {
-        if (query.test(content)) {
-            return true;
-        }
-        return false;
+        return query.test(content);
     } else {
-        if (content.includes(query)) {
-            return true;
-        }
-        return false;
+        return content.includes(query);
     }
 }
 
