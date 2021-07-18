@@ -1,4 +1,3 @@
-/* eslint-disable promise/param-names */
 const express = require('express');
 const basicAuth = require('express-basic-auth');
 const secure = require('express-force-https');
