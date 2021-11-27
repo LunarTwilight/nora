@@ -152,7 +152,7 @@ app.post('/search', async (req, res) => {
         finished = true;
     });
 
-    while (true) {
+    /*while (true) {
         await wait(40000);
         if (finished) break;
 
@@ -165,7 +165,7 @@ app.post('/search', async (req, res) => {
                 });
             })();
         }
-    }
+    }*/
 });
 
 app.listen(process.env.PORT || 8080, function () {
