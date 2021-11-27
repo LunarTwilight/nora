@@ -20,7 +20,7 @@
     "express": "^4.17.1",
     "express-basic-auth": "^1.2.0",
     "express-force-https": "^1.0.0",
-    "got": "^11.8.2",
-    "prom-client": "^14.0.1"
+    "express-prometheus-middleware": "^1.2.0",
+    "got": "^11.8.2"
   }
 }

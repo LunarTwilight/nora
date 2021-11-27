@@ -4,15 +4,9 @@ const secure = require('express-force-https');
 const got = require('got');
 const path = require('path');
 const pkg = require('./package.json');
-const { collectDefaultMetrics, register } = require('prom-client');
+const prom = require('express-prometheus-middleware');
 
 const app = express();
-
-collectDefaultMetrics({
-    label: {
-        name: 'nora'
-    }
-});
 
 const wait = ms => new Promise(res => setTimeout(res, ms));
 const query = ({
@@ -53,15 +47,7 @@ const searchResults = (page, query) => {
     return content.includes(query);
 }
 
-app.get('/metrics', async (req, res) => {
-    try {
-        res.set('Content-Type', register.contentType);
-        res.end(await register.metrics());
-    } catch (err) {
-        res.staus(500).end(err);
-    }
-});
-
+app.use(prom);
 app.use(secure);
 app.use(basicAuth({
     users: {
