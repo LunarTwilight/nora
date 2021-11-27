@@ -10,7 +10,7 @@ const app = express();
 
 collectDefaultMetrics({
     label: {
-        name: 'aiki'
+        name: 'nora'
     }
 });
 
