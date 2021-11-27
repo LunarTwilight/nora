@@ -53,6 +53,15 @@ const searchResults = (page, query) => {
     return content.includes(query);
 }
 
+app.get('/metrics', async (req, res) => {
+    try {
+        res.set('Content-Type', register.contentType);
+        res.end(await register.metrics());
+    } catch (err) {
+        res.staus(500).end(err);
+    }
+});
+
 app.use(secure);
 app.use(basicAuth({
     users: {
@@ -69,15 +78,6 @@ app.use(express.urlencoded({
 
 app.get('/', (req, res) => {
     res.sendFile(path.resolve('index.html'));
-});
-
-app.get('/metrics', async (req, res) => {
-    try {
-        res.set('Content-Type', register.contentType);
-        res.end(await register.metrics());
-    } catch (err) {
-        res.staus(500).end(err);
-    }
 });
 
 app.get('/search', (req, res) => {
