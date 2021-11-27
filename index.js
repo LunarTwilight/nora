@@ -4,8 +4,15 @@ const secure = require('express-force-https');
 const got = require('got');
 const path = require('path');
 const pkg = require('./package.json');
+const { collectDefaultMetrics, register } = require('prom-client');
 
 const app = express();
+
+collectDefaultMetrics({
+    label: {
+        name: 'aiki'
+    }
+});
 
 const wait = ms => new Promise(res => setTimeout(res, ms));
 const query = ({
@@ -62,6 +69,15 @@ app.use(express.urlencoded({
 
 app.get('/', (req, res) => {
     res.sendFile(path.resolve('index.html'));
+});
+
+app.get('/metrics', async (req, res) => {
+    try {
+        res.set('Content-Type', register.contentType);
+        res.end(await register.metrics());
+    } catch (err) {
+        res.staus(500).end(err);
+    }
 });
 
 app.get('/search', (req, res) => {
