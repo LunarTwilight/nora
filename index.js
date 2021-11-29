@@ -97,7 +97,7 @@ app.post('/search', async (req, res) => {
         wiki = req.body.wiki;
     }
 
-    await got.head(`https://${wiki}.fandom.com/api.php`, {
+    await got.head(`https://${wiki}/api.php`, {
         headers: {
             'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue - https://youtu.be/e35AQK014tI`
         }
@@ -132,7 +132,7 @@ app.post('/search', async (req, res) => {
                 }
                 try {
                     for (const page of Object.values(data.query.pages).filter(page => searchResults(page, req.body.query))) {
-                        res.write(`<a href="https://${wiki}.fandom.com/wiki/${page.title}">${page.title}</a><br>`);
+                        res.write(`<a href="https://${wiki}/wiki/${page.title}">${page.title}</a><br>`);
                     }
                 } catch (error) {
                     console.error(error, data, ns);
