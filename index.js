@@ -77,7 +77,7 @@ app.use(express.urlencoded({
 }));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve('index.html'));
+    res.sendFile(path.resolve('/public/index.html'));
 });
 
 app.get('/search', (req, res) => {
@@ -85,12 +85,19 @@ app.get('/search', (req, res) => {
 });
 
 app.post('/search', async (req, res) => {
+    let wiki;
     let finished = false;
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Transfer-Encoding', 'chunked');
     res.write('<link rel="stylesheet" href="results.css"/>');
 
-    await got.head(`https://${req.body.wiki}.fandom.com/api.php`, {
+    if (req.body.wiki.includes('.')) {
+        wiki = req.body.wiki.split('.')[0] + '.fandom.com/' + req.body.wiki.split('.')[1];
+    } else {
+        wiki = req.body.wiki;
+    }
+
+    await got.head(`https://${wiki}.fandom.com/api.php`, {
         headers: {
             'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue - https://youtu.be/e35AQK014tI`
         }
@@ -108,7 +115,7 @@ app.post('/search', async (req, res) => {
     for (const ns of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
         await query({
             finished,
-            wiki: req.body.wiki,
+            wiki: wiki,
             params: {
                 action: 'query',
                 generator: 'allpages',
@@ -125,7 +132,7 @@ app.post('/search', async (req, res) => {
                 }
                 try {
                     for (const page of Object.values(data.query.pages).filter(page => searchResults(page, req.body.query))) {
-                        res.write(`<a href="https://${req.body.wiki}.fandom.com/wiki/${page.title}">${page.title}</a><br>`);
+                        res.write(`<a href="https://${wiki}.fandom.com/wiki/${page.title}">${page.title}</a><br>`);
                     }
                 } catch (error) {
                     console.error(error, data, ns);
