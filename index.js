@@ -92,7 +92,7 @@ app.post('/search', async (req, res) => {
     res.write('<link rel="stylesheet" href="results.css"/>');
 
     if (req.body.wiki.includes('.')) {
-        wiki = req.body.wiki.split('.')[0] + '.fandom.com/' + req.body.wiki.split('.')[1];
+        wiki = req.body.wiki.split('.')[1] + '.fandom.com/' + req.body.wiki.split('.')[0];
     } else {
         wiki = req.body.wiki;
     }
