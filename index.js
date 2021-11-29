@@ -24,7 +24,7 @@ const query = ({
         const searchParams = { ...params };
 
         while (true) {
-            const data = await got(`https://${wiki}.fandom.com/api.php`, {
+            const data = await got(`https://${wiki}/api.php`, {
                 searchParams,
                 headers: {
                     'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue - https://youtu.be/e35AQK014tI`
