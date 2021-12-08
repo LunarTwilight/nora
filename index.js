@@ -5,8 +5,14 @@ const got = require('got');
 const path = require('path');
 const pkg = require('./package.json');
 const { collectDefaultMetrics, register } = require('prom-client');
+import * as Sentry from '@sentry/node';
 
 const app = express();
+
+Sentry.init({
+    dsn: process.env.DSN
+});
+app.use(Sentry.Handlers.requestHandler());
 
 collectDefaultMetrics({
     label: {
@@ -174,6 +180,8 @@ app.post('/search', async (req, res) => {
         }
     }*/
 });
+
+app.use(Sentry.Handlers.errorHandler());
 
 app.listen(process.env.PORT || 8080, function () {
     console.log('Listening!');
