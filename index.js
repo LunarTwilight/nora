@@ -5,7 +5,7 @@ const got = require('got');
 const path = require('path');
 const pkg = require('./package.json');
 const { collectDefaultMetrics, register } = require('prom-client');
-import * as Sentry from '@sentry/node';
+const Sentry = require('@sentry/node');
 
 const app = express();
 
