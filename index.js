@@ -100,7 +100,7 @@ app.post('/search', async (req, res) => {
     if (req.body.wiki.includes('.')) {
         wiki = req.body.wiki.split('.')[1] + '.fandom.com/' + req.body.wiki.split('.')[0];
     } else {
-        wiki = req.body.wiki;
+        wiki = req.body.wiki + '.fandom.com';
     }
 
     await got.head(`https://${wiki}/api.php`, {
