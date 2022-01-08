@@ -1,13 +1,15 @@
 const express = require('express');
 const basicAuth = require('express-basic-auth');
 const secure = require('express-force-https');
-const got = require('got');
+const got = require('grb');
 const path = require('path');
 const pkg = require('./package.json');
 const { collectDefaultMetrics, register } = require('prom-client');
 const Sentry = require('@sentry/node');
 
 const app = express();
+
+require('merida').init();
 
 Sentry.init({
     dsn: process.env.DSN
