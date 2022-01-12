@@ -150,7 +150,7 @@ app.post('/search', async (req, res) => {
     }
 
     finished = true;
-    res.end('<style>#thinking { display: none; }</style><script>alert(\'Done!\')');
+    res.end('<style>#thinking, #thinking + br { display: none; }</style><script>alert(\'Done!\')</script>');
 
     req.on('aborted', () => {
         console.log('aborting connection');
