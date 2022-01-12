@@ -22,7 +22,7 @@ collectDefaultMetrics({
     }
 });
 
-const wait = ms => new Promise(res => setTimeout(res, ms));
+//const wait = ms => new Promise(res => setTimeout(res, ms));
 const query = ({
     wiki,
     params,
@@ -118,7 +118,7 @@ app.post('/search', async (req, res) => {
         return;
     }
 
-    res.write('Thinking...<br>');
+    res.write('<div id="thinking">Thinking...</div><br>');
 
     for (const ns of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
         await query({
@@ -150,7 +150,7 @@ app.post('/search', async (req, res) => {
     }
 
     finished = true;
-    res.end('All done!');
+    res.end('<style>#thinking { display: none; }</style><script>alert(\'Done!\')');
 
     req.on('aborted', () => {
         console.log('aborting connection');
