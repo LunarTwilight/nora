@@ -56,7 +56,7 @@ const query = ({
 const searchResults = (page, query) => {
     const content = page.revisions[0].slots.main['*'];
     if (query.startsWith('/')) {
-        const parts = query.match(/\/(.*)\/(.*)/);
+        const parts = query.match(/\/(.*)\/(?!.*\/)(.*)/);
         return new RegExp(parts[1], parts[2]).test(content);
     }
     return content.includes(query);
