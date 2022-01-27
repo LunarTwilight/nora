@@ -56,7 +56,7 @@ const query = ({
 const searchResults = (page, query) => {
     const content = page.revisions[0].slots.main['*'];
     if (query.startsWith('/')) {
-        return query.test(content);
+        return query.slice(1, -1).test(content);
     }
     return content.includes(query);
 }
