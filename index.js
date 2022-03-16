@@ -23,36 +23,30 @@ collectDefaultMetrics({
 });
 
 //const wait = ms => new Promise(res => setTimeout(res, ms));
-const query = ({
-    wiki,
-    params,
-    onResult
-}) => {
-    return new Promise(async resolve => { //eslint-disable-line no-async-promise-executor
-        const searchParams = { ...params };
+const query = ({ wiki, params, onResult }) => new Promise(async resolve => {
+    const searchParams = { ...params };
 
-        while (true) {
-            const data = await got(`https://${wiki}/api.php`, {
-                searchParams,
-                headers: {
-                    'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue - https://youtu.be/e35AQK014tI`
-                }
-            }).json();
-
-            const shouldStop = onResult(data);
-
-            if (shouldStop !== true && data.continue) {
-                Object.assign(
-                    searchParams,
-                    data.continue
-                );
-            } else {
-                resolve();
-                break;
+    while (true) {
+        const data = await got(`https://${wiki}/api.php`, {
+            searchParams,
+            headers: {
+                'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue - https://youtu.be/e35AQK014tI`
             }
+        }).json();
+
+        const shouldStop = onResult(data);
+
+        if (shouldStop !== true && data.continue) {
+            Object.assign(
+                searchParams,
+                data.continue
+            );
+        } else {
+            resolve();
+            break;
         }
-    });
-}
+    }
+});
 const searchResults = (page, query) => {
     const content = page.revisions[0].slots.main['*'];
     if (query.startsWith('/')) {
