@@ -54,7 +54,7 @@ const searchResults = (page, query) => {
         return new RegExp(parts[1], parts[2]).test(content);
     }
     return content.includes(query);
-}
+};
 
 app.get('/metrics', async (req, res) => {
     try {
