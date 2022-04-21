@@ -2,6 +2,8 @@ body {
     background-image: url('image.jpg');
     background-size: cover;
     display: flex;
+    min-height: 100vh;
+    margin: 0;
 }
 * {
     font-family: 'Karla', sans-serif;
