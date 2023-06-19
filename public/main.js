@@ -1,8 +1,8 @@
 const ws = new WebSocket('wss://nora.janey.cf/search');
 
 document.querySelector('#entry input[type="submit"]').addEventListener('click', () => {
-    const wiki = document.querySelector('#entry #wiki').trim();
-    const query = document.querySelector('#entry #query').trim();
+    const wiki = document.querySelector('#entry #wiki').textContent.trim();
+    const query = document.querySelector('#entry #query').textContent.trim();
     if (!wiki || !query) {
         alert('no wiki or query');
         return;
