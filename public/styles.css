@@ -41,6 +41,9 @@ body:not(.results) {
 #entry input[type="submit"] {
     grid-area: 3 / 1 / 4 / 3;
 }
+body:not(.results) #results {
+    display: none;
+}
 body.results {
     background-color: black;
     color: hotpink;
