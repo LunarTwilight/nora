@@ -52,6 +52,17 @@ const getPages = async (bot, namespace) => {
     return results;
 };
 
+//https://stackoverflow.com/a/40486595
+const mergeByName = arr => lodash(arr)
+    .groupBy(item => item.pageid)
+    .map(group => lodash.mergeWith(...[{}].concat(group, (obj, src) => {
+        if (Array.isArray(obj)) {
+            return obj.concat(src);
+        }
+    })))
+    .values()
+    .value();
+
 app.get('/metrics', async (req, res) => {
     try {
         res.set('Content-Type', register.contentType);
