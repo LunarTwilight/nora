@@ -35,6 +35,23 @@ const searchResults = (page, query) => {
     return content.includes(query);
 };
 
+const getPages = async (bot, namespace) => {
+    let results = [];
+    for await (const json of bot.continuedQueryGen({
+        action: 'query',
+        generator: 'allpages',
+        gapnamespace: namespace,
+        prop: 'revisions',
+        rvprop: 'content',
+        rvslots: 'main'
+    })) {
+        if (json.query?.pages) {
+            results = results.concat(json.query.pages);
+        }
+    }
+    return results;
+};
+
 app.get('/metrics', async (req, res) => {
     try {
         res.set('Content-Type', register.contentType);
