@@ -55,6 +55,6 @@ body.results #entry {
     display: none;
 }
 body.results.done #thinking,
-body.results.done #thinging + br {
+body.results.done #thinking + br {
     display: none;
 }
