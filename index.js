@@ -8,8 +8,7 @@ const path = require('path');
 const { collectDefaultMetrics, register } = require('prom-client');
 const Sentry = require('@sentry/node');
 
-const app = express();
-expressWs(app);
+const { app } = expressWs(express());
 require('merida').init();
 
 Sentry.init({
