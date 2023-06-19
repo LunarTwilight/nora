@@ -7,14 +7,16 @@
         <link rel="shortcut icon" href="favicon.ico"/>
         <link rel="stylesheet" href="styles.css"/>
         <link href="https://fonts.googleapis.com/css2?family=Karla:wght@300&display=swap" rel="stylesheet">
+        <script src="main.js"></script>
     </head>
     <body>
-        <form action="/search" method="post">
+        <div id="entry">
             <label for="wiki">Wiki:</label>
             <input type="text" id="wiki" name="wiki" required pattern="^([a-z-]+\.)?([a-z0-9-]+)$" title="lowercase and numbers only">
             <label for="query">Query:</label>
             <input type="text" id="query" name="query" required title="plaintext or regex">
             <input type="submit" value="Hammer it">
         </form>
+        <div id="results"></div>
     </body>
 </HTML>

@@ -1,4 +1,4 @@
-body {
+body:not(.results) {
     background-image: url('image.jpg');
     background-size: cover;
     display: flex;
@@ -8,7 +8,7 @@ body {
 * {
     font-family: 'Karla', sans-serif;
 }
-form {
+#entry {
     margin: auto;
     text-align: right;
     background: rgba(0, 0, 0, 0.75);
@@ -20,24 +20,38 @@ form {
     grid-column-gap: 8px;
     grid-row-gap: 20px;
 }
-input {
+#entry input {
     background-color: #312c2c;
     color: #eeeeee;
     border: 1px solid #1d1b1b;
     border-radius: 3px;
 }
-label[for="wiki"] {
+#entry label[for="wiki"] {
     grid-area: 1 / 1 / 2 / 2;
 }
-#wiki {
+#entry #wiki {
     grid-area: 1 / 2 / 2 / 3;
 }
-label[for="query"] {
+#entry label[for="query"] {
     grid-area: 2 / 1 / 3 / 2;
 }
-#query {
+#entry #query {
     grid-area: 2 / 2 / 3 / 3;
 }
-input[type="submit"] {
+#entry input[type="submit"] {
     grid-area: 3 / 1 / 4 / 3;
+}
+body.results {
+    background-color: black;
+    color: hotpink;
+}
+body.results a {
+    color: #ff3f8b;
+}
+body.results #entry {
+    display: none;
+}
+body.results.done #thinking,
+body.results.done #thinging + br {
+    display: none;
 }

@@ -1,14 +1,15 @@
 const express = require('express');
+const expressWs = require('express-ws');
+const { Mwn } = require('mwn');
 const basicAuth = require('express-basic-auth');
 const secure = require('express-force-https');
 const got = require('grb');
 const path = require('path');
-const pkg = require('./package.json');
 const { collectDefaultMetrics, register } = require('prom-client');
 const Sentry = require('@sentry/node');
 
 const app = express();
-
+expressWs(app);
 require('merida').init();
 
 Sentry.init({
@@ -22,31 +23,6 @@ collectDefaultMetrics({
     }
 });
 
-//const wait = ms => new Promise(res => setTimeout(res, ms));
-const query = ({ wiki, params, onResult }) => new Promise(async resolve => {
-    const searchParams = { ...params };
-
-    while (true) {
-        const data = await got(`https://${wiki}/api.php`, {
-            searchParams,
-            headers: {
-                'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue - https://youtu.be/e35AQK014tI`
-            }
-        }).json();
-
-        const shouldStop = onResult(data);
-
-        if (shouldStop !== true && data.continue) {
-            Object.assign(
-                searchParams,
-                data.continue
-            );
-        } else {
-            resolve();
-            break;
-        }
-    }
-});
 const searchResults = (page, query) => {
     const content = page.revisions[0].slots.main['*'];
     if (query.startsWith('/')) {
@@ -61,7 +37,7 @@ app.get('/metrics', async (req, res) => {
         res.set('Content-Type', register.contentType);
         res.end(await register.metrics());
     } catch (err) {
-        res.staus(500).end(err);
+        res.status(500).end(err);
     }
 });
 
@@ -75,9 +51,6 @@ app.use(basicAuth({
 app.use(express.static('public', {
     maxAge: '3600000'
 }));
-app.use(express.urlencoded({
-    extended: false
-}));
 
 app.get('/', (req, res) => {
     res.sendFile(path.resolve('/public/index.html'));
@@ -87,95 +60,90 @@ app.get('/search', (req, res) => {
     res.redirect('/');
 });
 
-app.post('/search', async (req, res) => {
-    let wiki;
-    let finished = false;
-    res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Transfer-Encoding', 'chunked');
-    res.write('<link rel="stylesheet" href="results.css"/>');
-
-    if (req.body.wiki.includes('.')) {
-        wiki = req.body.wiki.split('.')[1] + '.fandom.com/' + req.body.wiki.split('.')[0];
-    } else {
-        wiki = req.body.wiki + '.fandom.com';
-    }
-
-    await got.head(`https://${wiki}/api.php`, {
-        headers: {
-            'user-agent': `Nora ${pkg.version} - contact Sophiedp if issue - https://youtu.be/e35AQK014tI`
+app.ws('/search', (ws, req) => {
+    ws.on('message', async msg => {
+        let wiki = null;
+        try {
+            JSON.parse(msg);
+        } catch {
+            ws.close(1008, 'Invalid message');
+            return;
         }
-    }).catch(result => {
-        finished = true;
-        const code = result.response.statusCode;
-        res.end(`Wiki returned: <a href="https://developer.mozilla.org/docs/Web/HTTP/Status/${code}">${code}</a>`);
-    });
-    if (finished) {
-        return;
-    }
 
-    res.write('<div id="thinking">Thinking...</div><br>');
+        const message = JSON.parse(msg);
+        if (!message.wiki || !message.query) {
+            ws.close(1008, 'no wiki or query provided');
+            return;
+        }
 
-    for (const ns of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
-        await query({
-            finished,
-            wiki: wiki,
-            params: {
+        if (message.wiki.includes('.')) {
+            wiki = message.wiki.split('.')[1] + '.fandom.com/' + message.wiki.split('.')[0];
+        } else {
+            wiki = message.wiki + '.fandom.com';
+        }
+
+        try {
+            await got.head(`https://${wiki}/api.php`, {
+                headers: {
+                    'user-agent': 'Nora - Contact Sophiedp if issue - https://youtu.be/e35AQK014tI'
+                }
+            });
+        } catch (error) {
+            ws.close(1008, `wiki check request returned ${error.response.statusCode}`);
+            return;
+        }
+
+        ws.send(JSON.stringify({
+            msg: 'ack'
+        }));
+
+        const bot = await Mwn.init({
+            apiUrl: `https://${wiki}/api.php`,
+            userAgent: 'Nora - Contact Sophiedp if issue - https://youtu.be/e35AQK014tI'
+        });
+
+        for (const ns of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
+            for await (const json of bot.continuedQueryGen({
                 action: 'query',
                 generator: 'allpages',
                 prop: 'revisions',
                 rvprop: 'content',
                 rvslots: '*',
-                gaplimit: 50,
-                gapnamespace: ns,
-                format: 'json'
-            },
-            onResult: data => {
-                if (finished || !data.query) {
-                    return true;
-                }
-                try {
-                    for (const page of Object.values(data.query.pages).filter(page => searchResults(page, req.body.query))) {
-                        res.write(`<a href="https://${wiki}/wiki/${page.title}">${page.title}</a><br>`);
+                gaplimit: 'max',
+                gapnamespace: ns
+            })) {
+                if (json.query?.pages) {
+                    for (const page of Object.values(json.query.pages).filter(page => searchResults(page, message.query))) {
+                        ws.send(JSON.stringify({
+                            msg: 'result',
+                            url: `https://${wiki}/wiki/${page.title}`,
+                            title: page.title
+                        }));
                     }
-                } catch (error) {
-                    console.error(error, data, ns);
                 }
             }
-        });
-    }
+        }
 
-    finished = true;
-    res.end('<style>#thinking, #thinking + br { display: none; }</style><script>alert(\'Done!\')</script>');
+        ws.send(JSON.stringify({
+            msg: 'done'
+        }));
+        ws.close(1000, 'done');
+    });
 
     req.on('aborted', () => {
         console.log('aborting connection');
-        finished = true;
+        ws.close(1001, 'client aborted connection');
     });
 
     req.on('close', () => {
         console.log('closing connection');
-        finished = true;
+        ws.close(1001, 'client closed connection');
     });
 
     req.on('end', () => {
         console.log('ending connection');
-        finished = true;
+        ws.close(1001, 'client ended connection');
     });
-
-    /*while (true) {
-        await wait(40000);
-        if (finished) break;
-
-        res.write('...<br>');
-        if (process.env.PORT) {
-            (async function () {
-                await got('https://a-nora.herokuapp.com', {
-                    username: 'admin',
-                    password: process.env.PASSWORD
-                });
-            })();
-        }
-    }*/
 });
 
 app.use(Sentry.Handlers.errorHandler());
