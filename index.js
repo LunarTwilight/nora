@@ -96,7 +96,7 @@ app.ws('/search', (ws, req) => {
             msg: 'ack'
         }));
 
-        const bot = await mwn.init({
+        const bot = new mwn({
             apiUrl: `https://${wiki}/api.php`,
             userAgent: 'Nora - Contact Sophiedp if issue - https://youtu.be/e35AQK014tI'
         });
