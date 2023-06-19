@@ -1,6 +1,6 @@
 const express = require('express');
 const expressWs = require('express-ws');
-const { Mwn } = require('mwn');
+const { mwn } = require('mwn');
 const basicAuth = require('express-basic-auth');
 const secure = require('express-force-https');
 const got = require('grb');
@@ -96,7 +96,7 @@ app.ws('/search', (ws, req) => {
             msg: 'ack'
         }));
 
-        const bot = await Mwn.init({
+        const bot = await mwn.init({
             apiUrl: `https://${wiki}/api.php`,
             userAgent: 'Nora - Contact Sophiedp if issue - https://youtu.be/e35AQK014tI'
         });
