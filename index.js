@@ -135,24 +135,14 @@ app.ws('/search', (ws, req) => {
         });
 
         for (const ns of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
-            for await (const json of bot.continuedQueryGen({
-                action: 'query',
-                generator: 'allpages',
-                prop: 'revisions',
-                rvprop: 'content',
-                rvslots: 'main',
-                gaplimit: 'max',
-                gapnamespace: ns
-            })) {
-                if (json.query?.pages) {
-                    for (const page of json.query.pages.filter(page => searchResults(page, message.query))) {
-                        ws.send(JSON.stringify({
-                            msg: 'result',
-                            url: `https://${wiki}/wiki/${page.title}`,
-                            title: page.title
-                        }));
-                    }
-                }
+            const results = await getPages(bot, ns);
+            const pages = mergeByName(results);
+            for (const page of pages.filter(page => searchResults(page, message.query))) {
+                ws.send(JSON.stringify({
+                    msg: 'result',
+                    url: `https://${wiki}/wiki/${page.title}`,
+                    title: page.title
+                }));
             }
         }
 
