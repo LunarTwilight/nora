@@ -12,7 +12,7 @@ document.querySelector('#entry input[type="submit"]').addEventListener('click', 
         if (event.code === 1000) {
             return;
         }
-        alert(`websocket closed: ${event.reason}`);
+        alert(`websocket closed\ncode: ${event.code}\nreason: ${event.reason}`);
     });
     ws.addEventListener('message', event => {
         const data = JSON.parse(event.data);
