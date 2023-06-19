@@ -113,7 +113,7 @@ app.ws('/search', (ws, req) => {
                 formatversion: 2
             })) {
                 if (json.query?.pages) {
-                    for (const page of Object.values(json.query.pages).filter(page => searchResults(page, message.query))) {
+                    for (const page of json.query.pages.filter(page => searchResults(page, message.query))) {
                         ws.send(JSON.stringify({
                             msg: 'result',
                             url: `https://${wiki}/wiki/${page.title}`,
