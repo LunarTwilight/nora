@@ -23,7 +23,7 @@ collectDefaultMetrics({
 });
 
 const searchResults = (page, query) => {
-    const content = page.revisions[0].slots.main['*'];
+    const { content } = page.revisions[0].slots.main;
     if (query.startsWith('/')) {
         const parts = query.match(/\/(.*)\/(?!.*\/)(.*)/);
         return new RegExp(parts[1], parts[2]).test(content);
@@ -107,10 +107,9 @@ app.ws('/search', (ws, req) => {
                 generator: 'allpages',
                 prop: 'revisions',
                 rvprop: 'content',
-                rvslots: '*',
+                rvslots: 'main',
                 gaplimit: 'max',
-                gapnamespace: ns,
-                formatversion: 2
+                gapnamespace: ns
             })) {
                 if (json.query?.pages) {
                     for (const page of json.query.pages.filter(page => searchResults(page, message.query))) {
