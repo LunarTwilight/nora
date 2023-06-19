@@ -7,6 +7,7 @@ const got = require('grb');
 const path = require('path');
 const { collectDefaultMetrics, register } = require('prom-client');
 const Sentry = require('@sentry/node');
+const lodash = require('lodash');
 
 const { app } = expressWs(express());
 require('merida').init();
