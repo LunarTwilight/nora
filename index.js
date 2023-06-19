@@ -109,7 +109,8 @@ app.ws('/search', (ws, req) => {
                 rvprop: 'content',
                 rvslots: '*',
                 gaplimit: 'max',
-                gapnamespace: ns
+                gapnamespace: ns,
+                formatversion: 2
             })) {
                 if (json.query?.pages) {
                     for (const page of Object.values(json.query.pages).filter(page => searchResults(page, message.query))) {
