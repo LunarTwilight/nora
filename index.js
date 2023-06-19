@@ -10,7 +10,7 @@ const Sentry = require('@sentry/node');
 const lodash = require('lodash');
 
 const { app } = expressWs(express());
-require('merida').init();
+//require('merida').init();
 
 Sentry.init({
     dsn: process.env.DSN
