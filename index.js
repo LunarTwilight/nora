@@ -23,6 +23,10 @@ collectDefaultMetrics({
 });
 
 const searchResults = (page, query) => {
+    if (!page.revisions) {
+        console.warn('Page doesn\'t have revisions', page);
+        return false;
+    }
     const { content } = page.revisions[0].slots.main;
     if (query.startsWith('/')) {
         const parts = query.match(/\/(.*)\/(?!.*\/)(.*)/);
