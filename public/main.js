@@ -57,6 +57,10 @@ document.querySelector('#entry input[type="submit"]').addEventListener('click', 
         query
     }));
 
+    document.addEventListener('beforeunload', () => {
+        ws.close(1001, 'user leaving');
+    });
+
     const heartbeat = setInterval(() => {
         switch (ws.readyState) {
             case 0:
