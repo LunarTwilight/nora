@@ -7,13 +7,20 @@ document.querySelector('#entry input[type="submit"]').addEventListener('click', 
     }
 
     const ws = new WebSocket('wss://nora.janey.cf/search');
+
     ws.addEventListener('close', event => {
         if (event.code === 1000) {
             return;
         }
+
         alert(`websocket closed\ncode: ${event.code}\nreason: ${event.reason}`);
     });
+
     ws.addEventListener('message', event => {
+        if (event.data === 'pong') {
+            return;
+        }
+
         const data = JSON.parse(event.data);
         switch (data.msg) {
             case 'ack': {
