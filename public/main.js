@@ -50,4 +50,18 @@ document.querySelector('#entry input[type="submit"]').addEventListener('click', 
         wiki,
         query
     }));
+
+    const heartbeat = setInterval(() => {
+        switch (ws.readyState) {
+            case 0:
+                break;
+            case 1:
+                ws.send('ping');
+                break;
+            case 2:
+            case 3:
+                clearInterval(heartbeat);
+                break;
+        }
+    }, 20000);
 });
