@@ -94,6 +94,11 @@ app.get('/search', (req, res) => {
 
 app.ws('/search', (ws, req) => {
     ws.on('message', async msg => {
+        if (msg === 'ping') {
+            ws.send('pong');
+            return;
+        }
+
         let wiki = null;
         try {
             JSON.parse(msg);
