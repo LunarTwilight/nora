@@ -52,26 +52,28 @@ document.querySelector('#entry input[type="submit"]').addEventListener('click', 
         }
     });
 
-    ws.send(JSON.stringify({
-        wiki,
-        query
-    }));
+    ws.addEventListener('open', () => {
+        ws.send(JSON.stringify({
+            wiki,
+            query
+        }));
 
-    document.addEventListener('beforeunload', () => {
-        ws.close(1001, 'user leaving');
+        document.addEventListener('beforeunload', () => {
+            ws.close(1001, 'user leaving');
+        });
+
+        const heartbeat = setInterval(() => {
+            switch (ws.readyState) {
+                case 0:
+                    break;
+                case 1:
+                    ws.send('ping');
+                    break;
+                case 2:
+                case 3:
+                    clearInterval(heartbeat);
+                    break;
+            }
+        }, 20000);
     });
-
-    const heartbeat = setInterval(() => {
-        switch (ws.readyState) {
-            case 0:
-                break;
-            case 1:
-                ws.send('ping');
-                break;
-            case 2:
-            case 3:
-                clearInterval(heartbeat);
-                break;
-        }
-    }, 20000);
 });
