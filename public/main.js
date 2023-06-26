@@ -8,7 +8,6 @@ document.querySelector('#entry input[type="submit"]').addEventListener('click', 
         return;
     }
 
-
     ws.addEventListener('close', event => {
         if (event.code === 1000) {
             return;
