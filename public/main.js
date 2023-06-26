@@ -1,5 +1,3 @@
-const ws = new WebSocket('wss://nora.janey.cf/search');
-
 document.querySelector('#entry input[type="submit"]').addEventListener('click', () => {
     const wiki = document.querySelector('#entry #wiki').value.trim();
     const query = document.querySelector('#entry #query').value.trim();
@@ -7,6 +5,8 @@ document.querySelector('#entry input[type="submit"]').addEventListener('click', 
         alert('no wiki or query');
         return;
     }
+
+    const ws = new WebSocket('wss://nora.janey.cf/search');
 
     ws.addEventListener('close', event => {
         if (event.code === 1000) {
