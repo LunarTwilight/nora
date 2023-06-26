@@ -99,7 +99,6 @@ app.ws('/search', (ws, req) => {
             return;
         }
 
-        let wiki = null;
         try {
             JSON.parse(msg);
         } catch {
@@ -113,6 +112,7 @@ app.ws('/search', (ws, req) => {
             return;
         }
 
+        let wiki = null;
         if (message.wiki.includes('.')) {
             wiki = message.wiki.split('.')[1] + '.fandom.com/' + message.wiki.split('.')[0];
         } else {
