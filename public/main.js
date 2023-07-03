@@ -17,10 +17,6 @@ document.querySelector('#entry input[type="submit"]').addEventListener('click', 
     });
 
     ws.addEventListener('message', event => {
-        if (event.data === 'pong') {
-            return;
-        }
-
         const data = JSON.parse(event.data);
         switch (data.msg) {
             case 'ack': {
@@ -61,19 +57,5 @@ document.querySelector('#entry input[type="submit"]').addEventListener('click', 
         document.addEventListener('beforeunload', () => {
             ws.close(1001, 'user leaving');
         });
-
-        const heartbeat = setInterval(() => {
-            switch (ws.readyState) {
-                case 0:
-                    break;
-                case 1:
-                    ws.send('ping');
-                    break;
-                case 2:
-                case 3:
-                    clearInterval(heartbeat);
-                    break;
-            }
-        }, 20000);
     });
 });

@@ -94,11 +94,6 @@ app.get('/search', (req, res) => {
 
 app.ws('/search', (ws, req) => {
     ws.on('message', async msg => {
-        if (msg === 'ping') {
-            ws.send('pong');
-            return;
-        }
-
         try {
             JSON.parse(msg);
         } catch {
@@ -157,20 +152,19 @@ app.ws('/search', (ws, req) => {
         ws.close(1000, 'done');
     });
 
-    req.on('aborted', () => {
-        console.log('aborting connection');
-        ws.close(1001, 'client aborted connection');
-    });
-
-    req.on('close', () => {
-        console.log('closing connection');
-        ws.close(1001, 'client closed connection');
-    });
-
-    req.on('end', () => {
-        console.log('ending connection');
-        ws.close(1001, 'client ended connection');
-    });
+    const heartbeat = setInterval(() => {
+        switch (ws.readyState) {
+            case 0:
+                break;
+            case 1:
+                ws.ping();
+                break;
+            case 2:
+            case 3:
+                clearInterval(heartbeat);
+                break;
+        }
+    }, 20000);
 });
 
 app.use(Sentry.Handlers.errorHandler());
