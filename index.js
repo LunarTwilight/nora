@@ -36,7 +36,7 @@ const searchResults = (page, query) => {
     return content.includes(query);
 };
 
-const getPages = async (bot, namespace) => {
+const getPages = async (bot, namespace, ws) => {
     let results = [];
     for await (const json of bot.continuedQueryGen({
         action: 'query',
@@ -46,6 +46,10 @@ const getPages = async (bot, namespace) => {
         rvprop: 'content',
         rvslots: 'main'
     })) {
+        if (ws.readyState !== 1) {
+            console.log('stopping');
+            break;
+        }
         if (json.query?.pages) {
             results = results.concat(json.query.pages);
         }
@@ -139,7 +143,7 @@ app.ws('/search', ws => {
                 console.log('stopping');
                 break;
             }
-            const results = await getPages(bot, ns);
+            const results = await getPages(bot, ns, ws);
             if (ws.readyState !== 1) {
                 console.log('stopping');
                 break;
