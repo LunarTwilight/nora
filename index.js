@@ -92,7 +92,7 @@ app.get('/search', (req, res) => {
     res.redirect('/');
 });
 
-app.ws('/search', (ws, req) => {
+app.ws('/search', ws => {
     ws.on('message', async msg => {
         try {
             JSON.parse(msg);
@@ -135,9 +135,25 @@ app.ws('/search', (ws, req) => {
         });
 
         for (const ns of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 828, 829]) {
+            if (ws.readyState !== 1) {
+                console.log('stopping');
+                break;
+            }
             const results = await getPages(bot, ns);
+            if (ws.readyState !== 1) {
+                console.log('stopping');
+                break;
+            }
             const pages = mergeByName(results);
+            if (ws.readyState !== 1) {
+                console.log('stopping');
+                break;
+            }
             for (const page of pages.filter(page => searchResults(page, message.query))) {
+                if (ws.readyState !== 1) {
+                    console.log('stopping');
+                    break;
+                }
                 ws.send(JSON.stringify({
                     msg: 'result',
                     url: `https://${wiki}/wiki/${page.title}`,
