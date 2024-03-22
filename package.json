@@ -18,7 +18,7 @@
   "homepage": "https://github.com/LunarTwilight/nora#readme",
   "dependencies": {
     "@sentry/node": "^7.107.0",
-    "express": "^4.19.0",
+    "express": "^4.19.1",
     "express-basic-auth": "^1.2.1",
     "express-force-https": "^1.0.0",
     "express-ws": "^5.0.2",
