@@ -1,3 +1,4 @@
+require('./instrument')
 const express = require('express');
 const expressWs = require('express-ws');
 const { Mwn } = require('mwn');
@@ -11,11 +12,6 @@ const lodash = require('lodash');
 
 const { app } = expressWs(express());
 //require('merida').init();
-
-Sentry.init({
-    dsn: process.env.DSN
-});
-app.use(Sentry.Handlers.requestHandler());
 
 collectDefaultMetrics({
     label: {
@@ -187,7 +183,7 @@ app.ws('/search', ws => {
     }, 20000);
 });
 
-app.use(Sentry.Handlers.errorHandler());
+Sentry.setupExpressErrorHandler(app);
 
 app.listen(process.env.PORT || 8080, function () {
     console.log('Listening!');
