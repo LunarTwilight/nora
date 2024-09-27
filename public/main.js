@@ -40,7 +40,7 @@ document.querySelector('#entry input[type="submit"]').addEventListener('click', 
                 document.body.classList.add('done');
                 if (!document.getElementById('results').querySelector('a')) {
                     const span = document.createElement('span');
-                    span.innerText('No results');
+                    span.innerText = 'No results';
                     document.getElementById('results').append(span);
                 }
                 alert('Done!');
