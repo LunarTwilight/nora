@@ -1,4 +1,4 @@
-require('./instrument')
+require('./instrument');
 const express = require('express');
 const expressWs = require('express-ws');
 const { Mwn } = require('mwn');
