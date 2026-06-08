@@ -13,11 +13,7 @@ const lodash = require('lodash');
 const { app } = expressWs(express());
 require('merida').init();
 
-collectDefaultMetrics({
-    label: {
-        name: 'nora'
-    }
-});
+collectDefaultMetrics();
 
 const searchResults = (page, query) => {
     if (!page.revisions) {
